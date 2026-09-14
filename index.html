@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101828">
+<title>English Master — Test</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f2f4f7;color:#101828;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+main{max-width:520px;margin:auto;min-height:100vh;background:#fff;padding:env(safe-area-inset-top) 18px env(safe-area-inset-bottom)}
+header{display:flex;justify-content:space-between;align-items:center;padding:20px 0 12px}
+h1{font-size:27px;margin:0}h2{margin:0 0 8px}.muted{color:#667085}.card{background:#f8fafc;border:1px solid #eaecf0;border-radius:22px;padding:20px;margin:12px 0}
+button{width:100%;border:0;border-radius:15px;padding:15px;margin-top:10px;font-size:16px;font-weight:700;background:#101828;color:white}
+.secondary{background:#eaecf0;color:#101828}.level{display:flex;gap:10px;align-items:center;padding:15px;border:2px solid #eaecf0;border-radius:16px;margin:9px 0;cursor:pointer}
+.level b{display:block}.badge{font-size:24px}.progress{height:8px;background:#e4e7ec;border-radius:99px;overflow:hidden;margin:14px 0}.fill{height:100%;width:0;background:#101828;transition:.25s}
+.q{font-size:23px;font-weight:750;line-height:1.35;margin:18px 0}.option{background:white;color:#101828;border:2px solid #d0d5dd;text-align:left}
+.option.correct{border-color:#12b76a;background:#ecfdf3}.option.wrong{border-color:#f04438;background:#fef3f2}
+.feedback{padding:16px;border-radius:16px;margin-top:15px;line-height:1.5}.good{background:#ecfdf3}.bad{background:#fef3f2}
+.rule{margin-top:10px;padding:12px;border-radius:12px;background:#eef4ff}.hidden{display:none}.center{text-align:center}
+.score{font-size:52px;font-weight:850;margin:15px}.pill{padding:6px 10px;border-radius:99px;background:#eaecf0;font-size:13px}
+</style></head><body><main>
+<header><div><h1>🇬🇧 English Master</h1><div class="muted">Aprende jugando</div></div><span class="pill" id="xp">0 XP</span></header>
+
+<section id="home"><div class="card"><h2>Elige tu nivel</h2><div class="muted">Las preguntas se mezclan y no se repiten dentro del test.</div>
+<div class="level" onclick="start('A1')"><span class="badge">🟢</span><div><b>A1 — Principiante</b><span class="muted">To be y estructuras básicas</span></div></div>
+<div class="level" onclick="start('A2')"><span class="badge">🔵</span><div><b>A2 — Básico</b><span class="muted">Pasado y verbos frecuentes</span></div></div>
+<div class="level" onclick="start('B1')"><span class="badge">🟠</span><div><b>B1 — Intermedio</b><span class="muted">Tiempos y estructuras</span></div></div>
+<button class="secondary" onclick="alert('Próximamente: B2 y C1')">🔒 B2 / C1 — Próximamente</button></div>
+<div class="card"><b>💡 Después de cada respuesta</b><p class="muted">Verás traducción, explicación y regla. Si fallas, podrás repasarla.</p></div></section>
+
+<section id="quiz" class="hidden"><div class="muted" id="levelTitle"></div><div class="progress"><div class="fill" id="fill"></div></div>
+<div class="muted" id="counter"></div><div class="card"><div class="q" id="q"></div><div id="opts"></div><div id="feedback"></div><button id="next" class="hidden" onclick="next()">Siguiente →</button></div>
+<button class="secondary" onclick="home()">← Volver</button></section>
+
+<section id="result" class="hidden"><div class="card center"><h2>🎉 ¡Terminado!</h2><div class="score" id="final"></div><p id="msg"></p>
+<button onclick="again()">🔄 Repetir nivel</button><button class="secondary" onclick="home()">📚 Elegir nivel</button></div></section>
+</main>
+<script>
+const data={"A1": [["I ___ a student.", "am", "is", "are", "Soy estudiante.", "Con I usamos am.", "I → am."], ["She ___ my friend.", "is", "am", "are", "Ella es mi amiga.", "Con she usamos is.", "He / She / It → is."], ["They ___ at home.", "are", "is", "am", "Ellos están en casa.", "Con they usamos are.", "You / We / They → are."], ["We ___ happy.", "are", "is", "am", "Estamos felices.", "Con we usamos are.", "You / We / They → are."], ["He ___ tired.", "is", "are", "am", "Él está cansado.", "Con he usamos is.", "He / She / It → is."], ["You ___ very kind.", "are", "is", "am", "Eres muy amable.", "Con you usamos are.", "You → are."]], "A2": [["Yesterday, I ___ at home.", "was", "were", "am", "Ayer estaba en casa.", "Yesterday indica pasado y I va con was.", "I / He / She / It → was."], ["They ___ late yesterday.", "were", "was", "are", "Ellos llegaron tarde ayer.", "They es plural y en pasado usa were.", "You / We / They → were."], ["She ___ to school yesterday.", "went", "go", "goes", "Ella fue al colegio ayer.", "Go es irregular: su pasado es went.", "go → went."], ["We ___ football last Saturday.", "played", "play", "plays", "Jugamos al fútbol el sábado pasado.", "Play es regular y añadimos -ed.", "verbo + -ed en regulares."], ["He ___ breakfast at 8.", "had", "has", "have", "Él desayunó a las 8.", "Have es irregular: su pasado es had.", "have → had."]], "B1": [["I ___ never ___ to London.", "have / been", "has / been", "did / go", "Nunca he estado en Londres.", "Con I en Present Perfect usamos have + participio.", "have + past participle."], ["If it rains, we ___ at home.", "will stay", "stayed", "would stayed", "Si llueve, nos quedaremos en casa.", "Es First Conditional: if + presente, will + infinitivo.", "If + present → will + infinitive."], ["She ___ working here since 2024.", "has been", "have been", "was", "Ella trabaja aquí desde 2024.", "Since conecta un punto del pasado con el presente: Present Perfect Continuous.", "has/have been + verb-ing."], ["I didn't ___ the answer.", "know", "knew", "known", "No sabía la respuesta.", "Después de did/didn't usamos el verbo en forma base.", "didn't + infinitive."]]};
+let level,qs=[],i=0,ok=0,answered=false;
+const $=id=>document.getElementById(id);
+function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
+function show(id){['home','quiz','result'].forEach(x=>$(x).classList.toggle('hidden',x!==id))}
+function start(l){level=l;qs=shuffle(data[l]);i=0;ok=0;show('quiz');$('levelTitle').textContent='Nivel '+l;render()}
+function render(){
+ answered=false;let x=qs[i];$('q').textContent=x[0];$('counter').textContent=`Pregunta ${i+1} de ${qs.length}`;$('fill').style.width=(i/qs.length*100)+'%';
+ let opts=shuffle([x[1],x[2],x[3]]);$('opts').innerHTML='';opts.forEach(o=>{let b=document.createElement('button');b.className='option';b.textContent=o;b.onclick=()=>answer(b,o,x);$('opts').appendChild(b)});$('feedback').innerHTML='';$('next').classList.add('hidden')}
+function answer(btn,ch,x){if(answered)return;answered=true;let right=ch===x[1];if(right)ok++;document.querySelectorAll('.option').forEach(b=>{b.disabled=true;if(b.textContent===x[1])b.classList.add('correct')});if(!right)btn.classList.add('wrong');
+$('feedback').innerHTML=`<div class="feedback ${right?'good':'bad'}"><b>${right?'✅ ¡Correcto!':'❌ Incorrecto'}</b><p>🇪🇸 <b>Traducción:</b> ${x[4]}</p><b>❓ ¿Por qué?</b><br>${x[5]}<div class="rule"><b>📌 Regla:</b><br>${x[6]}</div></div>`;$('next').classList.remove('hidden')}
+function next(){if(i<qs.length-1){i++;render()}else finish()}
+function finish(){let pct=Math.round(ok/qs.length*100);localStorage.xp=Number(localStorage.xp||0)+ok*10;$('final').textContent=`${ok} / ${qs.length}`;$('msg').textContent=pct>=80?'🔥 ¡Excelente!':pct>=60?'👍 ¡Buen trabajo!':'💪 Repasa los errores y vuelve a intentarlo.';show('result');$('xp').textContent=localStorage.xp+' XP'}
+function again(){start(level)}function home(){show('home');$('xp').textContent=(localStorage.xp||0)+' XP'}
+$('xp').textContent=(localStorage.xp||0)+' XP';
+</script></body></html>
